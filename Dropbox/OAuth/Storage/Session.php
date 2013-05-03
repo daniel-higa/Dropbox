@@ -11,9 +11,9 @@
  * @package Dropbox\Oauth
  * @subpackage Storage
  */
-namespace Dropbox\OAuth\Storage;
+//namespace Dropbox_OAuth_Storage;
 
-class Session implements StorageInterface
+class Dropbox_OAuth_Storage_Session implements Dropbox_OAuth_Storage_StorageInterface
 {
     /**
      * Session namespace
@@ -38,7 +38,7 @@ class Session implements StorageInterface
      * and if an instance of the encrypter is passed, set the encryption object
      * @return void
      */
-    public function __construct(Encrypter $encrypter = null, $userID = null)
+    public function __construct($encrypter = null, $userID = null)
     {
     	// If no session is started, start one
         if (session_id() == '') {
@@ -46,7 +46,7 @@ class Session implements StorageInterface
         }
         
         // Set the encrypter object if required
-        if ($encrypter instanceof Encrypter) {
+        if (true) {
             $this->encrypter = $encrypter;
         }
         
@@ -74,7 +74,7 @@ class Session implements StorageInterface
     public function get($type)
     {
         if ($type != 'request_token' && $type != 'access_token') {
-            throw new \Dropbox\Exception("Expected a type of either 'request_token' or 'access_token', got '$type'");
+            throw new Dropbox_Exception("Expected a type of either 'request_token' or 'access_token', got '$type'");
         } else {
             if (isset($_SESSION[$this->namespace][$this->userID][$type])) {
                 $token = $this->decrypt($_SESSION[$this->namespace][$this->userID][$type]);
@@ -94,7 +94,7 @@ class Session implements StorageInterface
     public function set($token, $type)
     {
         if ($type != 'request_token' && $type != 'access_token') {
-            throw new \Dropbox\Exception("Expected a type of either 'request_token' or 'access_token', got '$type'");
+            throw new _Dropbox_Exception("Expected a type of either 'request_token' or 'access_token', got '$type'");
         } else {
             $token = $this->encrypt($token);
             $_SESSION[$this->namespace][$this->userID][$type] = $token;
@@ -124,9 +124,9 @@ class Session implements StorageInterface
         $token = serialize($token);
         
         // Encrypt the token if there is an Encrypter instance
-        if ($this->encrypter instanceof Encrypter) {
+
             $token = $this->encrypter->encrypt($token);
-        }
+
         
         // Return the token
         return $token;
@@ -142,9 +142,9 @@ class Session implements StorageInterface
     protected function decrypt($token)
     {
         // Decrypt the token if there is an Encrypter instance
-        if ($this->encrypter instanceof Encrypter) {
+
             $token = $this->encrypter->decrypt($token);
-        }
+
         
         // Return the unserialized token
         return @unserialize($token);

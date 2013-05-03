@@ -18,7 +18,7 @@ try {
     // Upload the file with an alternative filename
     $put = $dropbox->putFile($tmp, 'api_upload_test.txt');
     var_dump($put);
-} catch (\Dropbox\Exception\BadRequestException $e) {
+} catch (Dropbox_BadRequestException $e) {
     // The file extension is ignored by Dropbox (e.g. thumbs.db or .ds_store)
     echo 'Invalid file extension';
 }

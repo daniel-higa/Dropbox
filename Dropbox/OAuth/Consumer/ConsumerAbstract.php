@@ -7,10 +7,10 @@
 * @package Dropbox\OAuth
 * @subpackage Consumer
 */
-namespace Dropbox\OAuth\Consumer;
-use \Dropbox\API as API;
+//namespace Dropbox\OAuth\Consumer;
 
-abstract class ConsumerAbstract
+
+abstract class Dropbox_OAuth_Consumer_ConsumerAbstract
 {
     // Dropbox web endpoint
     const WEB_URL = 'https://www.dropbox.com/1/';
@@ -45,10 +45,11 @@ abstract class ConsumerAbstract
      */
     protected function authenticate()
     {
+
         if ((!$this->storage->get('access_token'))) {
             try {
                 $this->getAccessToken();
-            } catch(\Dropbox\Exception $e) {
+            } catch(Exception $e) {
                 $this->getRequestToken();
                 $this->authorise();
             }
@@ -64,7 +65,7 @@ abstract class ConsumerAbstract
     {
         // Nullify any request token we already have
         $this->storage->set(null, 'request_token');
-        $url = API::API_URL . self::REQUEST_TOKEN_METHOD;
+        $url = Dropbox_API::API_URL . self::REQUEST_TOKEN_METHOD;
         $response = $this->fetch('POST', $url, '');
         $token = $this->parseTokenString($response['body']);
         $this->storage->set($token, 'request_token');
@@ -117,7 +118,7 @@ abstract class ConsumerAbstract
     public function getAccessToken()
     {
         // Get the signed request URL
-        $response = $this->fetch('POST', API::API_URL, self::ACCESS_TOKEN_METHOD);
+        $response = $this->fetch('POST', Dropbox_API::API_URL, self::ACCESS_TOKEN_METHOD);
         $token = $this->parseTokenString($response['body']);
         $this->storage->set($token, 'access_token');
     }
@@ -133,7 +134,7 @@ abstract class ConsumerAbstract
     {
         if (!$token = $this->storage->get('access_token')) {
             if (!$token = $this->storage->get('request_token')) {
-                $token = new \stdClass();
+                $token = new stdClass();
                 $token->oauth_token = null;
                 $token->oauth_token_secret = null;
             }
@@ -243,7 +244,7 @@ abstract class ConsumerAbstract
                 $this->sigMethod = $method;
                 break;
             default:
-                throw new \Dropbox\Exception('Unsupported signature method ' . $method);
+                throw new Dropbox_Exception('Unsupported signature method ' . $method);
         }
     }
     
@@ -255,7 +256,7 @@ abstract class ConsumerAbstract
     public function setOutFile($handle)
     {
         if (!is_resource($handle) || get_resource_type($handle) != 'stream') {
-            throw new \Dropbox\Exception('Outfile must be a stream resource');
+            throw new Dropbox_Exception('Outfile must be a stream resource');
         }
         $this->outFile = $handle;
     }
@@ -268,7 +269,7 @@ abstract class ConsumerAbstract
     public function setInFile($handle)
     {
         if (!is_resource($handle) || get_resource_type($handle) != 'stream') {
-            throw new \Dropbox\Exception('Infile must be a stream resource');
+            throw new Dropbox_Exception('Infile must be a stream resource');
         }
         fseek($handle, 0);
         $this->inFile = $handle;
@@ -285,7 +286,7 @@ abstract class ConsumerAbstract
     private function parseTokenString($response)
     {
         $parts = explode('&', $response);
-        $token = new \stdClass();
+        $token = new stdClass();
         foreach ($parts as $part) {
             list($k, $v) = explode('=', $part, 2);
             $k = strtolower($k);

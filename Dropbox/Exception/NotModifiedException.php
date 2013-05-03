@@ -6,11 +6,8 @@
  * @link https://github.com/benthedesigner/dropbox
  * @package Dropbox
  */
-namespace Dropbox\Exception;
 
-use Dropbox\Exception;
-
-class NotModifiedException extends Exception
+class Dropbox_NotModifiedException extends Exception
 {
 
 }

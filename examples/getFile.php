@@ -24,7 +24,7 @@ try {
     // Download the file
     $file = $dropbox->getFile($path, $outFile);
     var_dump($file);
-} catch (\Dropbox\Exception\NotFoundException $e) {
+} catch (Dropbox_NotFoundException $e) {
     // The file wasn't found at the specified path/revision
     echo 'The file was not found at the specified path/revision';
 }

@@ -12,7 +12,7 @@ require_once('bootstrap.php');
 try {
 	// Attempt to retrieve the account information
 	$accountInfo = $dropbox->accountInfo();
-} catch (\Dropbox\Exception $e) {
+} catch (Dropbox_Exception $e) {
 	if ($e->getCode() == 401) {
 		// If the token is invalid, delete it and re-authenticate
 		$storage->delete();

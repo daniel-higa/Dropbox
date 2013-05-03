@@ -6,11 +6,8 @@
  * @link https://github.com/benthedesigner/dropbox
  * @package Dropbox
  */
-namespace Dropbox\Exception;
 
-use Dropbox\Exception;
-
-class BadRequestException extends Exception
+class Dropbox_BadRequestException extends Exception
 {
 
 }

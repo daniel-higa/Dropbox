@@ -16,8 +16,15 @@ ini_set('display_errors', 'On');
 ini_set('html_errors', 'Off');
 session_start();
 
-// Register a simple autoload function
-spl_autoload_register(function($class){
-	$class = str_replace('\\', '/', $class);
-	require_once('../' . $class . '.php');
-});
+require_once('../Classes/Dropbox/API.php');
+require_once('../Classes/Dropbox/OAuth/Storage/Encrypter.php');
+require_once('../Classes/Dropbox/OAuth/Storage/StorageInterface.php');
+require_once('../Classes/Dropbox/OAuth/Storage/Session.php');
+require_once('../Classes/Dropbox/OAuth/Consumer/ConsumerAbstract.php');
+require_once('../Classes/Dropbox/OAuth/Consumer/Curl.php');
+require_once('../Classes/Dropbox/Exception/BadRequestException.php');
+require_once('../Classes/Dropbox/Exception/CurlException.php');
+require_once('../Classes/Dropbox/Exception/NotAcceptableException.php');
+require_once('../Classes/Dropbox/Exception/NotFoundException.php');
+require_once('../Classes/Dropbox/Exception/NotModifiedException.php');
+require_once('../Classes/Dropbox/Exception/UnsupportedMediaTypeException.php');

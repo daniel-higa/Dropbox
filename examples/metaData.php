@@ -22,11 +22,11 @@ try {
     // Get the metadata for the file/folder specified in $path
     $metaData = $dropbox->metaData($path, null, $limit, $hash);
     var_dump($metaData);
-} catch (\Dropbox\Exception\NotModifiedException $e) {
+} catch (Dropbox_NotModifiedException $e) {
     // The contents were not changed since $hash was issued
     // As you *should* be caching metadata responses, you can revert to using cached data
     echo 'The folder contents have not been modified';
-} catch (\Dropbox\Exception\NotAcceptableException $e) {
+} catch (Dropbox_NotAcceptableException $e) {
     // The number of entries exceeds $limit
     echo 'Too many entries to return';
 }

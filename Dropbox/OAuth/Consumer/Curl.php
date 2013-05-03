@@ -7,19 +7,10 @@
 * @package Dropbox\OAuth
 * @subpackage Consumer
 */
-namespace Dropbox\OAuth\Consumer;
+//namespace Dropbox\OAuth\Consumer;
 
-use Dropbox\API as API,
-    Dropbox\OAuth\Storage\StorageInterface as StorageInterface,
-    Dropbox\Exception,
-    Dropbox\Exception\BadRequestException,
-    Dropbox\Exception\CurlException,
-    Dropbox\Exception\NotAcceptableException,
-    Dropbox\Exception\NotFoundException,
-    Dropbox\Exception\NotModifiedException,
-    Dropbox\Exception\UnsupportedMediaTypeException;
 
-class Curl extends ConsumerAbstract
+class Dropbox_OAuth_Consumer_Curl extends Dropbox_OAuth_Consumer_ConsumerAbstract
 {    
     /**
      * Default cURL options
@@ -47,7 +38,7 @@ class Curl extends ConsumerAbstract
      * @param \Dropbox\OAuth\Consumer\StorageInterface $storage
      * @param string $callback
      */
-    public function __construct($key, $secret, StorageInterface $storage, $callback = null)
+    public function __construct($key, $secret, $storage, $callback = null)
     {
         // Check the cURL extension is loaded
         if (!extension_loaded('curl')) {
@@ -77,6 +68,7 @@ class Curl extends ConsumerAbstract
 
         // Initialise and execute a cURL request
         $handle = curl_init($request['url']);
+        //var_dump($request['url']);
         
         // Get the default options array
         $options = $this->defaultOptions;
@@ -105,12 +97,13 @@ class Curl extends ConsumerAbstract
         
         // Execute, get any error and close
         $response = curl_exec($handle);
+
         $error = curl_error($handle);
         curl_close($handle);
 
         //Check if a cURL error has occured
         if ($response === false) {
-            throw new CurlException($error);
+            throw new Dropbox_CurlException($error);
         } else {
             // Parse the response if it is a string
             if (is_string($response)) {
@@ -123,14 +116,14 @@ class Curl extends ConsumerAbstract
             // The API doesn't return an error message for the 304 status code...
             // 304's are only returned when the path supplied during metadata calls has not been modified
             if ($response['code'] == 304) {
-                $response['body'] = new \stdClass;
+                $response['body'] = new stdClass;
                 $response['body']->error = 'The folder contents have not changed';
             }
             
             // Check if an error occurred and throw an Exception
             if (!empty($response['body']->error)) {
                 // Dropbox returns error messages inconsistently...
-                if ($response['body']->error instanceof \stdClass) {
+                if ($response['body']->error instanceof stdClass) {
                     $array = array_values((array) $response['body']->error);
                     $message = $array[0];
                 } else {
@@ -140,15 +133,15 @@ class Curl extends ConsumerAbstract
                 // Throw an Exception with the appropriate with the appropriate message and code
                 switch ($response['code']) {
                     case 304:
-                        throw new NotModifiedException($message, 304);
+                        throw new Dropbox_NotModifiedException($message, 304);
                     case 400:
-                        throw new BadRequestException($message, 400);
+                        throw new Dropbox_BadRequestException($message, 400);
                     case 404:
-                        throw new NotFoundException($message, 404);
+                        throw new Dropbox_NotFoundException($message, 404);
                     case 406:
-                        throw new NotAcceptableException($message, 406);
+                        throw new Dropbox_NotAcceptableException($message, 406);
                     case 415:
-                        throw new UnsupportedMediaTypeException($message, 415);
+                        throw new Dropbox_UnsupportedMediaTypeException($message, 415);
                     default:
                         throw new Exception($message, $response['code']);
                 }

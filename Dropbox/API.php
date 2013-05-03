@@ -8,9 +8,9 @@
  * @link https://status.dropbox.com Dropbox status
  * @package Dropbox
  */
-namespace Dropbox;
+//namespace Dropbox;
 
-class API
+class Dropbox_API
 {
     // API Endpoints
     const API_URL     = 'https://api.dropbox.com/1/';
@@ -54,7 +54,7 @@ class API
      * @param OAuth\Consumer\ConsumerAbstract $OAuth
      * @param string $root Dropbox app access type
      */
-    public function __construct(OAuth\Consumer\ConsumerAbstract $OAuth, $root = 'sandbox')
+    public function __construct($OAuth, $root = 'sandbox')
     {
         $this->OAuth = $OAuth;
         $this->setRoot($root);
@@ -241,7 +241,7 @@ class API
 
         return array(
             'name' => ($outFile) ? $outFile : basename($file),
-            'mime' => $this->getMimeType(($outFile) ?: $response['body'], $outFile),
+            'mime' => $this->getMimeType(($outFile)?null:$response['body'], $outFile),
             'meta' => json_decode($response['headers']['x-dropbox-metadata']),
             'data' => $response['body'],
         );
@@ -557,7 +557,7 @@ class API
     private function getMimeType($data, $isFilename = false)
     {
         if (extension_loaded('fileinfo')) {
-            $finfo = new \finfo(FILEINFO_MIME);
+            $finfo = new finfo(FILEINFO_MIME);
             if ($isFilename !== false) {
                 return $finfo->file($data);
             }
