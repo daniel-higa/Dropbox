@@ -6,7 +6,7 @@ Unless otherwise stated, all components of the SDK are licensed under the [MIT L
 
 ### Requirements
 
-* PHP >= 5.3.1
+* PHP >= <del>5.3.1</del> 5.2.x
 * [PHP cURL][] (\Dropbox\OAuth\Consumer\Curl)
 * [PHP Mcrypt][] (\Dropbox\OAuth\Storage\Encrypter)
 * [PHP PDO][] (\Dropbox\OAuth\Storage\DB)
@@ -14,7 +14,7 @@ Unless otherwise stated, all components of the SDK are licensed under the [MIT L
 ### Known Issues
 
 * A recent change to the PDO storage handler will require a calling code change or end users will need to re-authorise the application. See [here][PDO handler change] for more information.
-* Due to [PHP Bug #48962][] affecting cURL, PHP >= <del>5.3.1</del> 5.2.x must be used until further consumers are available
+* Due to [PHP Bug #48962][] affecting cURL, PHP >= 5.3.1 must be used until further consumers are available
 
 ### Usage & Examples
 
